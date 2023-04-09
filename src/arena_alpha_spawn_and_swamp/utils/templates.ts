@@ -2,6 +2,6 @@ import { ATTACK, BodyPartConstant, CARRY, HEAL, MOVE, RANGED_ATTACK } from 'game
 
 export const haulerTemplate: BodyPartConstant[] = [MOVE, MOVE, CARRY, CARRY]
 
-export const attackerTemplate: BodyPartConstant[] = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, RANGED_ATTACK]
+export const attackerTemplate: BodyPartConstant[] = [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, RANGED_ATTACK, RANGED_ATTACK]
 
-export const healerTemplate: BodyPartConstant[] = [MOVE, MOVE, MOVE, MOVE, MOVE, HEAL]
+export const healerTemplate: BodyPartConstant[] = [MOVE, MOVE, MOVE, HEAL, HEAL, HEAL]

@@ -1,12 +1,25 @@
-import { ATTACK, HEAL, RANGED_ATTACK, RESOURCE_ENERGY } from 'game/constants'
+import { ATTACK, CARRY, HEAL, RANGED_ATTACK, RESOURCE_ENERGY, WORK } from 'game/constants'
 import { Creep, StructureContainer, StructureSpawn, StructureTower } from 'game/prototypes'
 import { findClosestByPath, getObjectsByPrototype } from 'game/utils'
+import { state } from './state'
 
 export const getSpawn = (_mine = true) => {
+    if (_mine && state.spawn) {
+        return state.spawn
+    }
+
+    if (!_mine && state.enemySpawn) {
+        return state.enemySpawn
+    }
+
     const toReturn = getObjectsByPrototype(StructureSpawn).find(i => (_mine ? i.my : !i.my))
 
-    if (toReturn) return toReturn
-    else {
+    if (toReturn) {
+        if (_mine) state.spawn = toReturn
+        else state.enemySpawn = toReturn
+
+        return toReturn
+    } else {
         return new StructureSpawn()
     }
 }
@@ -28,6 +41,10 @@ const enemyThreatsPredicate = (creep: Creep) => {
     )
 }
 
+const enemyCarriesPredicate = (creep: Creep) => {
+    return !creep.my && (creep.body.find(part => part.type === CARRY) || creep.body.find(part => part.type === WORK))
+}
+
 export const getEnemyAttackers = () => {
     return getObjectsByPrototype(Creep).filter(enemyThreatsPredicate)
 }
@@ -40,4 +57,8 @@ export const findEnemyCreeps = (attacker: Creep) => {
     const enemiesPosition = getEnemyAttackers().map(enemy => enemy.position())
 
     return findClosestByPath(attacker.position(), enemiesPosition)
+}
+
+export const getEnemyCarries = () => {
+    return getObjectsByPrototype(Creep).filter(enemyCarriesPredicate)
 }

@@ -11,7 +11,7 @@ module.exports = {
         'plugin:prettier/recommended',
         'plugin:import/typescript',
     ],
-    ignorePatterns: ['exported-game-constants.js'],
+    ignorePatterns: ['exported-game-constants.js', '*.d.ts'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: 'tsconfig.json',

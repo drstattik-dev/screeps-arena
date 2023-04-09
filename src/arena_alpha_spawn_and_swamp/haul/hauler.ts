@@ -1,19 +1,18 @@
 import { MaxNumberCreep, Role } from 'arena_alpha_spawn_and_swamp/constants/enums'
 import { findEnergyContainer, getSpawn } from 'arena_alpha_spawn_and_swamp/utils/getters'
+import { state } from 'arena_alpha_spawn_and_swamp/utils/state'
 import { haulerTemplate } from 'arena_alpha_spawn_and_swamp/utils/templates'
 import { ERR_NOT_IN_RANGE, RESOURCE_ENERGY } from 'game/constants'
 import { Creep } from 'game/prototypes'
 
 const spawn = getSpawn()
 
-const haulers: Creep[] = []
-
 export const spawnHauler = () => {
-    if (haulers.length < MaxNumberCreep.HAULER) {
+    if (state.haulers.length < MaxNumberCreep.HAULER) {
         const newCreep: Creep | undefined = spawn.spawnCreep(haulerTemplate).object
         if (newCreep) {
             newCreep.role = Role.Hauler
-            haulers.push(newCreep)
+            state.haulers.push(newCreep)
         }
     }
 }
@@ -34,7 +33,7 @@ const transfer = (creep: Creep) => {
 }
 
 export const haul = () => {
-    haulers.forEach((creep: Creep) => {
+    state.haulers.forEach((creep: Creep) => {
         const fullCapacity = creep.store?.getCapacity(RESOURCE_ENERGY)
         if (fullCapacity && creep.store[RESOURCE_ENERGY] < fullCapacity) {
             harvest(creep)
