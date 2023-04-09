@@ -24,7 +24,7 @@ export const heal = () => {
     state.healers.forEach(healer => {
         const bestMatch = findBestHealMatch()
 
-        if (bestMatch.hits !== bestMatch.hitsMax) {
+        if (bestMatch && bestMatch.hits !== bestMatch.hitsMax) {
             if (healer.heal(bestMatch) === ERR_NOT_IN_RANGE) {
                 healer.moveTo(bestMatch)
             }

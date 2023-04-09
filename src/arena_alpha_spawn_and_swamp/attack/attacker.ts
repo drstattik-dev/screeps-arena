@@ -11,7 +11,7 @@ const spawn = getSpawn()
 let reinforcement = false
 
 export const getEffectiveAttackers = () => {
-    return state.attackers.filter(attacker => attacker.x !== spawn.x || attacker.y !== spawn.y)
+    return state.attackers.filter(attacker => !attacker.isSpawning())
 }
 
 const squad: () => boolean = () => {
@@ -39,8 +39,6 @@ export const spawnAttacker = () => {
 }
 
 export const attack = () => {
-    console.log(state.attackers)
-
     if (!squad() && !reinforcement) return
 
     const bestMatch = findBestMatch()

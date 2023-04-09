@@ -54,7 +54,7 @@ if (arenas.length === 0) {
     if (targetArena === '') {
         console.log(`No arena targeted. Building all ${arenas.length} arenas.`)
     } else {
-        console.log(`Buidling ${arenas.length} arena(s) for target "${targetArena}"`)
+        console.log(`Building ${arenas.length} arena(s) for target "${targetArena}"`)
     }
 }
 

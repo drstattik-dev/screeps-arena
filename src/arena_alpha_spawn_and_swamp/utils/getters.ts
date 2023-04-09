@@ -35,6 +35,7 @@ export const findEnergyContainer = (creep: Creep) => {
 const enemyThreatsPredicate = (creep: Creep) => {
     return (
         !creep.my &&
+        !creep.isSpawning() &&
         (creep.body.find(part => part.type === ATTACK) ||
             creep.body.find(part => part.type === RANGED_ATTACK) ||
             creep.body.find(part => part.type === HEAL))
@@ -42,7 +43,7 @@ const enemyThreatsPredicate = (creep: Creep) => {
 }
 
 const enemyCarriesPredicate = (creep: Creep) => {
-    return !creep.my && (creep.body.find(part => part.type === CARRY) || creep.body.find(part => part.type === WORK))
+    return !creep.my && !creep.isSpawning() && (creep.body.find(part => part.type === CARRY) || creep.body.find(part => part.type === WORK))
 }
 
 export const getEnemyAttackers = () => {
@@ -54,9 +55,11 @@ export const getEnemyTowers = () => {
 }
 
 export const findEnemyCreeps = (attacker: Creep) => {
-    const enemiesPosition = getEnemyAttackers().map(enemy => enemy.position())
+    const enemiesPosition = getEnemyAttackers().map(enemy => {
+        return { x: enemy.x, y: enemy.y }
+    })
 
-    return findClosestByPath(attacker.position(), enemiesPosition)
+    return findClosestByPath({ x: attacker.x, y: attacker.y }, enemiesPosition)
 }
 
 export const getEnemyCarries = () => {

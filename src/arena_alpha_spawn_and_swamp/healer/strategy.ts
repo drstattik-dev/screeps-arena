@@ -4,5 +4,5 @@ import { Creep } from 'game/prototypes'
 export const findBestHealMatch = (): Creep => {
     const possibleTargets = state.attackers
 
-    return possibleTargets.sort((a, b) => a.hits - b.hits)[0]
+    return possibleTargets && possibleTargets.sort((a, b) => a.hits - b.hits)[0]
 }
