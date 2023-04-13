@@ -10,10 +10,12 @@ const spawn = getSpawn()
 
 export const spawnHealer = () => {
     if (state.healers.length < MaxNumberCreep.HEALER) {
-        const newCreep: Creep | undefined = spawn.spawnCreep(healerTemplate).object
-        if (newCreep) {
-            newCreep.role = Role.Healer
-            state.healers.push(newCreep)
+        if (!spawn.spawning) {
+            const newCreep: Creep | undefined = spawn.spawnCreep(healerTemplate).object
+            if (newCreep) {
+                newCreep.role = Role.Healer
+                state.healers.push(newCreep)
+            }
         }
     } else {
         state.healers = state.healers.filter(creep => creep.exists)

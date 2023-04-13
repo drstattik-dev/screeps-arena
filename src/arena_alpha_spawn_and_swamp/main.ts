@@ -1,7 +1,7 @@
 import { attack, spawnAttacker } from './attack/attacker'
 import { haul, spawnHauler } from './haul/hauler'
 import { heal, spawnHealer } from './healer/healers'
-import { init } from './prototypes/creep.proto'
+import { init } from './prototypes/merge.proto'
 
 init()
 export function loop(): void {

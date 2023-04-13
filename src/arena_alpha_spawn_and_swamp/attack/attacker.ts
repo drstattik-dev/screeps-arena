@@ -11,7 +11,7 @@ const spawn = getSpawn()
 let reinforcement = false
 
 export const getEffectiveAttackers = () => {
-    return state.attackers.filter(attacker => !attacker.isSpawning())
+    return state.attackers.filter(attacker => !attacker.isSpawning() && attacker.id !== undefined)
 }
 
 const squad: () => boolean = () => {
@@ -19,18 +19,21 @@ const squad: () => boolean = () => {
         return true
     } else {
         state.attackers.forEach(attacker => {
-            attacker.moveTo({ x: getSpawn().x - 4, y: getSpawn().y })
+            const xDirection = getSpawn().x === 5 ? 4 : -4
+            attacker.moveTo({ x: getSpawn().x + xDirection, y: getSpawn().y })
         })
         return false
     }
 }
 
 export const spawnAttacker = () => {
-    if (state.attackers.length < MaxNumberCreep.ATTACKER) {
-        const newCreep: Creep | undefined = spawn.spawnCreep(attackerTemplate).object
-        if (newCreep) {
-            newCreep.role = Role.Attacker
-            state.attackers.push(newCreep)
+    if (getEffectiveAttackers().length < MaxNumberCreep.ATTACKER) {
+        if (!spawn.spawning) {
+            const newCreep: Creep | undefined = spawn.spawnCreep(attackerTemplate).object
+            if (newCreep) {
+                newCreep.role = Role.Attacker
+                state.attackers.push(newCreep)
+            }
         }
     } else {
         state.attackers = state.attackers.filter(creep => creep.exists)
