@@ -28,11 +28,15 @@ export const checkIfSpawnContainer = (container: StructureContainer) => {
     return getSpawn().getRangeTo(container) < 5
 }
 
-export const findEnergyContainer = (creep: Creep) => {
-    const energySources = getObjectsByPrototype(StructureContainer).filter(source => {
+export const findAllEnergyContainers = () => {
+    return getObjectsByPrototype(StructureContainer).filter(source => {
         const energyValue = source.store.getUsedCapacity(RESOURCE_ENERGY)
-        return energyValue && energyValue > 10
+        return energyValue && energyValue > 0
     })
+}
+
+export const findEnergyContainer = (creep: Creep) => {
+    const energySources = findAllEnergyContainers()
     return creep.findClosestByRange(energySources)
 }
 

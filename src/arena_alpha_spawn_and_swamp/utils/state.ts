@@ -1,4 +1,4 @@
-import { Creep, StructureSpawn } from 'game/prototypes'
+import { Creep, OwnedStructure, StructureSpawn } from 'game/prototypes'
 
 interface State {
     spawn: StructureSpawn | null
@@ -8,6 +8,7 @@ interface State {
     extensionHaulers: Creep[]
     healers: Creep[]
     stage: number
+    extensions: Map<number | string, OwnedStructure>
 }
 
 export const state: State = {
@@ -18,4 +19,5 @@ export const state: State = {
     extensionHaulers: [],
     healers: [],
     stage: 0,
+    extensions: new Map<number | string, OwnedStructure>(),
 }

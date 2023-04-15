@@ -40,7 +40,7 @@ declare module 'game/prototypes' {
     }
 
     interface RoomPosition {
-        pos: Position
+        pos?: RoomPosition
     }
 }
 
