@@ -35,3 +35,11 @@ export const findBestMatch = () => {
         return enemySpawn
     }
 }
+
+export const findBestMatchForReinforcements = () => {
+    const { enemyCarries, enemyCreeps, enemySpawn } = stratTarget()
+
+    const targets = [...enemyCarries, ...enemyCreeps, enemySpawn]
+
+    return targets.length === 1 ? targets[1] : targets[0]
+}

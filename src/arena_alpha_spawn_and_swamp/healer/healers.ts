@@ -18,7 +18,7 @@ export const spawnHealer = () => {
             }
         }
     } else {
-        state.healers = state.healers.filter(creep => creep.exists)
+        state.healers.mutationFilter(creep => creep.exists)
     }
 }
 

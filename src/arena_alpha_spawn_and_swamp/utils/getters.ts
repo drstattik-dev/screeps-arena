@@ -24,6 +24,10 @@ export const getSpawn = (_mine = true) => {
     }
 }
 
+export const checkIfSpawnContainer = (container: StructureContainer) => {
+    return getSpawn().getRangeTo(container) < 5
+}
+
 export const findEnergyContainer = (creep: Creep) => {
     const energySources = getObjectsByPrototype(StructureContainer).filter(source => {
         const energyValue = source.store.getUsedCapacity(RESOURCE_ENERGY)

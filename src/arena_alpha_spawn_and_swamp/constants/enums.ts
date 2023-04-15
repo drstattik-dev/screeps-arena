@@ -10,4 +10,5 @@ export enum Role {
     Hauler = 'hauler',
     Attacker = 'attacker',
     Healer = 'healer',
+    Reinforcement = 'reinforcement',
 }
