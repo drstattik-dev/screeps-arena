@@ -5,20 +5,21 @@ import { Role } from '../constants/enums'
 
 declare global {
     interface Array<T> {
-        mutationFilter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): void
+        mutationFilter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]
     }
 }
 
 if (!Array.prototype.mutationFilter) {
     Array.prototype.mutationFilter = function <T>(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any) {
         for (let i = 0; i < this.length; i++) {
-            if (predicate.call(thisArg, this[i], i, this)) {
+            if (predicate.call(thisArg, this[i] as T, i, this as T[])) {
                 continue
             } else {
                 this.splice(i, 1)
                 i--
             }
         }
+        return this as T[]
     }
 }
 

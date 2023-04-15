@@ -7,8 +7,12 @@ import { Creep } from 'game/prototypes'
 
 const spawn = getSpawn()
 
+const getEffectiveHaulers = () => {
+    return state.haulers.filter(haulers => !haulers.isSpawning() && haulers.id !== undefined)
+}
+
 export const spawnHauler = () => {
-    if (state.haulers.length < MaxNumberCreep.HAULER) {
+    if (getEffectiveHaulers().length < MaxNumberCreep.HAULER) {
         const newCreep: Creep | undefined = spawn.spawnCreep(haulerTemplate).object
         if (newCreep) {
             newCreep.role = Role.Hauler
@@ -28,6 +32,9 @@ const harvest = (creep: Creep) => {
             }
         } else {
             // TODO
+            if (creep.withdraw(source, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(source)
+            }
             return
         }
     }

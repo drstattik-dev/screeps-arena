@@ -4,6 +4,7 @@ interface State {
     spawn: StructureSpawn | null
     enemySpawn: StructureSpawn | null
     attackers: Creep[]
+    rangedAttackers: Creep[]
     haulers: Creep[]
     extensionHaulers: Creep[]
     healers: Creep[]
@@ -15,6 +16,7 @@ export const state: State = {
     spawn: null,
     enemySpawn: null,
     attackers: [],
+    rangedAttackers: [],
     haulers: [],
     extensionHaulers: [],
     healers: [],

@@ -1,19 +1,22 @@
 import { MaxNumberCreep, Role } from 'arena_alpha_spawn_and_swamp/constants/enums'
 import { getEnemyAttackers, getSpawn } from 'arena_alpha_spawn_and_swamp/utils/getters'
 import { state } from 'arena_alpha_spawn_and_swamp/utils/state'
-import { attackerTemplate } from 'arena_alpha_spawn_and_swamp/utils/templates'
-import { ERR_NOT_IN_RANGE, ERR_NO_BODYPART } from 'game/constants'
+import { rangedAttackerTemplate } from 'arena_alpha_spawn_and_swamp/utils/templates'
+import { ERR_NOT_IN_RANGE, ERR_NO_BODYPART, OK } from 'game/constants'
 import { Creep, StructureSpawn, StructureTower } from 'game/prototypes'
 import { findBestMatch } from './strategy'
 
 const spawn = getSpawn()
 
-const getEffectiveAttackers = () => {
-    return state.attackers.filter(attacker => !attacker.isSpawning() && attacker.id !== undefined)
+export const getEffectiveAttackers = () => {
+    return state.rangedAttackers.filter(attacker => !attacker.isSpawning() && attacker.id !== undefined)
 }
 
 const squadAttack = (attacker: Creep, bestMatch: StructureSpawn | Creep | StructureTower) => {
-    switch (attacker.attack(bestMatch)) {
+    switch (attacker.rangedAttack(bestMatch)) {
+        case OK:
+            attacker.moveTo(spawn)
+            break
         case ERR_NOT_IN_RANGE:
             attacker.moveTo(bestMatch)
             break
@@ -26,16 +29,16 @@ const squadAttack = (attacker: Creep, bestMatch: StructureSpawn | Creep | Struct
 }
 
 const squad: () => boolean = () => {
-    if (getEffectiveAttackers().length === MaxNumberCreep.ATTACKER) {
+    if (getEffectiveAttackers().length === MaxNumberCreep.RANGED_ATTACKER) {
         return true
     } else {
         const closeEnemy = getEnemyAttackers().find(creep => creep.getRangeTo(spawn) < 7)
         if (closeEnemy) {
-            state.attackers.forEach(attacker => {
+            state.rangedAttackers.forEach(attacker => {
                 squadAttack(attacker, closeEnemy)
             })
         } else {
-            state.attackers.forEach(attacker => {
+            state.rangedAttackers.forEach(attacker => {
                 const xDirection = getSpawn().x === 5 ? 4 : -4
                 attacker.moveTo({ x: getSpawn().x + xDirection, y: getSpawn().y })
             })
@@ -44,24 +47,24 @@ const squad: () => boolean = () => {
     }
 }
 
-export const spawnAttacker = () => {
-    if (getEffectiveAttackers().length < MaxNumberCreep.ATTACKER) {
+export const spawnRangedAttacker = () => {
+    if (getEffectiveAttackers().length < MaxNumberCreep.RANGED_ATTACKER) {
         if (!spawn.spawning) {
-            const newCreep: Creep | undefined = spawn.spawnCreep(attackerTemplate).object
+            const newCreep: Creep | undefined = spawn.spawnCreep(rangedAttackerTemplate).object
             if (newCreep) {
-                newCreep.role = Role.Attacker
-                state.attackers.push(newCreep)
+                newCreep.role = Role.RangedAttacker
+                state.rangedAttackers.push(newCreep)
             }
         }
     } else {
-        state.attackers.mutationFilter(creep => creep.exists)
+        state.rangedAttackers.mutationFilter(creep => creep.exists)
     }
 }
 
-export const attack = () => {
+export const rangedAttack = () => {
     if (!squad()) return
 
-    state.attackers.forEach(attacker => {
+    state.rangedAttackers.forEach(attacker => {
         const bestMatch = findBestMatch(attacker)
         squadAttack(attacker, bestMatch)
     })

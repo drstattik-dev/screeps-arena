@@ -6,40 +6,37 @@ interface EnemyTargets {
     enemyCarries: Creep[]
     enemyTowers: StructureTower[]
     enemySpawn: StructureSpawn
+    closestEnemy: Creep | StructureTower | StructureSpawn
 }
 
-const stratTarget: () => EnemyTargets = () => {
+const stratTarget: (creep: Creep) => EnemyTargets = (creep: Creep) => {
     const enemyCreeps = getEnemyAttackers()
     const enemyCarries = getEnemyCarries()
     const enemyTowers = getEnemyTowers()
     const enemySpawn = getSpawn(false)
+    const closestEnemy = [...enemyCreeps, ...enemyCarries, ...enemyTowers, enemySpawn].sort((a, b) => creep.getRangeTo(a) - creep.getRangeTo(b))[0]
 
     return {
         enemyCreeps,
         enemyCarries,
         enemyTowers,
         enemySpawn,
+        closestEnemy,
     }
 }
 
-export const findBestMatch = () => {
-    const { enemyCreeps, enemyCarries, enemyTowers, enemySpawn } = stratTarget()
+export const findBestMatch = (creep: Creep) => {
+    const { enemyCreeps, enemyCarries, enemyTowers, enemySpawn, closestEnemy } = stratTarget(creep)
 
-    if (enemyTowers.length > 0) {
-        return enemyTowers[0]
+    if (closestEnemy.getRangeTo(creep) < 10) {
+        return closestEnemy
     } else if (enemyCreeps.length > 0) {
         return enemyCreeps[0]
+    } else if (enemyTowers.length > 0) {
+        return enemyTowers[0]
     } else if (enemyCarries.length > 0) {
         return enemyCarries[0]
     } else {
         return enemySpawn
     }
-}
-
-export const findBestMatchForReinforcements = () => {
-    const { enemyCarries, enemyCreeps, enemySpawn } = stratTarget()
-
-    const targets = [...enemyCarries, ...enemyCreeps, enemySpawn]
-
-    return targets.length === 1 ? targets[1] : targets[0]
 }

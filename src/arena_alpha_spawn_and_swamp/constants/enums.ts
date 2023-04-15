@@ -3,6 +3,7 @@ export enum MaxNumberCreep {
     EXTENSION_HAULER = 4,
     CONSTRUCTOR = 1,
     ATTACKER = 5,
+    RANGED_ATTACKER = 5,
     HEALER = 2,
 }
 
@@ -11,6 +12,7 @@ export enum Role {
     Hauler = 'hauler',
     ExtensionHauler = 'ExtensionHauler',
     Attacker = 'attacker',
+    RangedAttacker = 'attacker',
     Healer = 'healer',
     Reinforcement = 'reinforcement',
 }

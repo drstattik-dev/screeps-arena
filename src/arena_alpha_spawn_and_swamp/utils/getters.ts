@@ -55,11 +55,11 @@ const enemyCarriesPredicate = (creep: Creep) => {
 }
 
 export const getEnemyAttackers = () => {
-    return getObjectsByPrototype(Creep).filter(enemyThreatsPredicate)
+    return getObjectsByPrototype(Creep).mutationFilter(enemyThreatsPredicate)
 }
 
 export const getEnemyTowers = () => {
-    return getObjectsByPrototype(StructureTower).filter(struct => !struct.my)
+    return getObjectsByPrototype(StructureTower).mutationFilter(struct => !struct.my)
 }
 
 export const findEnemyCreeps = (attacker: Creep) => {
@@ -71,5 +71,5 @@ export const findEnemyCreeps = (attacker: Creep) => {
 }
 
 export const getEnemyCarries = () => {
-    return getObjectsByPrototype(Creep).filter(enemyCarriesPredicate)
+    return getObjectsByPrototype(Creep).mutationFilter(enemyCarriesPredicate)
 }
