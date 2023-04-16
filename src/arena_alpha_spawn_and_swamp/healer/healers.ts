@@ -8,8 +8,12 @@ import { findBestHealMatch } from './strategy'
 
 const spawn = getSpawn()
 
+export const getEffectiveHealers = () => {
+    return state.healers.filter(attacker => !attacker.isSpawning() && attacker.id !== undefined)
+}
+
 export const spawnHealer = () => {
-    if (state.healers.length < MaxNumberCreep.HEALER) {
+    if (getEffectiveHealers().length < MaxNumberCreep.HEALER) {
         if (!spawn.spawning) {
             const newCreep: Creep | undefined = spawn.spawnCreep(healerTemplate).object
             if (newCreep) {
@@ -24,7 +28,7 @@ export const spawnHealer = () => {
 
 export const heal = () => {
     state.healers.forEach(healer => {
-        const bestMatch = findBestHealMatch()
+        const bestMatch = findBestHealMatch(healer)
 
         if (bestMatch && bestMatch.hits !== bestMatch.hitsMax) {
             if (healer.rangedHeal(bestMatch) === ERR_NOT_IN_RANGE) {

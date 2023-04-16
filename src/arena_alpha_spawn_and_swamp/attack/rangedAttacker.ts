@@ -15,7 +15,9 @@ export const getEffectiveAttackers = () => {
 const squadAttack = (attacker: Creep, bestMatch: StructureSpawn | Creep | StructureTower) => {
     switch (attacker.rangedAttack(bestMatch)) {
         case OK:
-            attacker.moveTo(spawn)
+            if (attacker.getRangeTo(bestMatch) < 3) {
+                attacker.moveTo(spawn)
+            }
             break
         case ERR_NOT_IN_RANGE:
             attacker.moveTo(bestMatch)
